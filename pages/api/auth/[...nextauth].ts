@@ -30,18 +30,34 @@ export default NextAuth({
         if (data.status !== "success" || data.data.user.banned) {
           return false;
         }
+        user._id = data.data.user._id;
+        user.role = data.data.user.role;
+        return true;
       } catch (error) {
-        // console.log("ERRORRRRRR", error);
+        return false;
       }
-      return true;
     },
-    async jwt({ token, account }) {
+    async jwt({ token, user, account }) {
+      // console.log("JWT TOKEN", token);
+      // console.log("JWT USER", user);
+      // console.log("JWT ACCOUNT  ", account);
+
       if (account) {
         token.provider = account.provider;
+      }
+      if (user) {
+        token._id = user._id;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
+      console.log("SESSION TOKEN", token);
+      if (token) {
+        session.user._id = token._id as string;
+        session.user.role = token.role as string;
+        session.user.provider = token.provider as string;
+      }
       return session;
     },
   },
