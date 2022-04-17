@@ -1,7 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 import { Avatar, Badge, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -36,7 +35,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Navbar = () => {
   const { data: session, status } = useSession();
-  console.log(session, status);
+  console.log(session);
   if (status === "loading")
     return (
       <div className="container mx-auto text-center">
@@ -45,7 +44,7 @@ const Navbar = () => {
     );
 
   return (
-    <nav className="h-[64px] bg-indigo-600/80 flex items-center space-x-4 text-lg font-semibold text-gray-50 px-4 justify-between">
+    <nav className="h-[70px] bg-indigo-600/80 flex items-center space-x-4 text-lg font-semibold text-gray-50 px-4 justify-between">
       <Link href={"/"}>
         <a>Home</a>
       </Link>
@@ -64,7 +63,7 @@ const Navbar = () => {
             <Avatar
               src={session.user?.image || undefined}
               alt={session.user?.name || undefined}
-              sizes="large"
+              sx={{ width: 52, height: 52 }}
             />
           </StyledBadge>
           <p>{session.user?.name}</p>

@@ -15,7 +15,11 @@ const ProviderLoginButton = ({
 }: IProviderLoginButton) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signIn(providers.id);
+    try {
+      await signIn(providers.id);
+    } catch (err) {
+      console.log("error", err);
+    }
   };
 
   return (
