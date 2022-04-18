@@ -9,8 +9,8 @@ import {
 } from "../../../utils/validate";
 import userService from "../../../services/userService";
 import User from "../../../models/userModel";
-import dbConnect from "../../../lib/mongodb";
 import db from "../../../utils/db";
+import providerList from "../../../utils/providerList";
 
 const handler = nc();
 
@@ -20,7 +20,27 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     let user: IUserDocument;
     //connect database
     await db.connect();
-    if (req.body.provider === "credentials") {
+
+    if (providerList.includes(req.body.provider)) {
+      await signupProvidersValidate.validate(req.body, { abortEarly: false });
+
+      const { name, email, image, provider } = req.body;
+
+      // check email exist
+      const isExistUser = await userService.findUserByEmail(email as string);
+
+      // if email is not exist -> create new user in database
+      if (!isExistUser) {
+        user = new User({ name, email, image, provider });
+        // save new user
+        await userService.save(user);
+      } else {
+        // update user
+        user = isExistUser;
+      }
+
+      return resSuccess(res, { user });
+    } else if (req.body.provider === "credentials") {
       await signupCredentialsValidate.validate(req.body, { abortEarly: false });
 
       const { name, email, password } = req.body;
@@ -40,7 +60,6 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
           409
         );
       }
-
       // create new user
       user = new User({ name, email });
 
@@ -49,28 +68,19 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
       // save user
       await userService.save(user);
+      return resSuccess(res, { user });
     } else {
-      await signupProvidersValidate.validate(req.body, { abortEarly: false });
-
-      const { name, email, image, provider } = req.body;
-
-      // check email exist
-      const isExistUser = await userService.findUserByEmail(email as string);
-
-      // if email is not exist -> create new user in database
-      if (!isExistUser) {
-        user = new User({ name, email, image, provider });
-        // save new user
-        await userService.save(user);
-      } else {
-        // update user
-        user = isExistUser;
-      }
+      return resError(
+        res,
+        "BadRequest",
+        {
+          email: "Must be have provider",
+        },
+        400
+      );
     }
-    //connect database
-    await db.connect();
+
     // return user
-    return resSuccess(res, { user });
   } catch (error) {
     if (error instanceof Error && error.name === "ValidationError") {
       const errors = errorParse(error);
