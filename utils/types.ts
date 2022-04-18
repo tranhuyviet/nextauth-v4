@@ -41,7 +41,7 @@ export interface IReturnAuthUser {
 }
 
 export type IUserDocument = Document &
-  IUser & {
+  IReturnAuthUser & {
     banned: boolean;
     save: () => Promise<IUserDocument>;
     hashPassword: (password: string) => Promise<void>;

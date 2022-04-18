@@ -22,6 +22,21 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     // find user by email
     const user = await userService.findUserByEmail(email);
 
+    // check user is exist by login another providers
+    console.log(user);
+    if (user?.provider !== "credentials") {
+      return resError(
+        res,
+        "Unauthrized",
+        {
+          global:
+            "This email address is already in use by log in with " +
+            user?.provider,
+        },
+        401
+      );
+    }
+
     // check email and correct password
     // if email or password wrong -> only return errors.global = 'Invalid credentials'
     // not return: 'Email incorrect' or 'Password incorrect'

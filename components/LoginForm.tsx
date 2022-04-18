@@ -44,8 +44,6 @@ const LoginForm = () => {
       validationSchema: loginCredentialsValidate,
     });
 
-  console.log(errors);
-
   return (
     <form onSubmit={handleSubmit}>
       {/* email */}

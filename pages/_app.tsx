@@ -5,7 +5,6 @@ import { SessionProvider } from "next-auth/react";
 import Layout from "../components/Layout";
 import { apiUrl } from "../lib/config";
 
-console.log(apiUrl);
 // axios seting
 axios.defaults.baseURL = apiUrl;
 axios.defaults.withCredentials = true;
