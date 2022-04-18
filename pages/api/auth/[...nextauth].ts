@@ -10,11 +10,16 @@ export default NextAuth({
     }),
   ],
   secret: process.env.JWT_SECRET as string,
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
     signIn: "/login",
+    error: "/error",
   },
 
   callbacks: {
@@ -38,10 +43,6 @@ export default NextAuth({
       }
     },
     async jwt({ token, user, account }) {
-      // console.log("JWT TOKEN", token);
-      // console.log("JWT USER", user);
-      // console.log("JWT ACCOUNT  ", account);
-
       if (account) {
         token.provider = account.provider;
       }
@@ -52,7 +53,6 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }) {
-      console.log("SESSION TOKEN", token);
       if (token) {
         session.user._id = token._id as string;
         session.user.role = token.role as string;

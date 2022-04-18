@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 // axios seting
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://nextauth-v4.vercel.app/api"
+    ? process.env.API_URL
     : "http://localhost:3000/api";
 axios.defaults.baseURL = url;
 axios.defaults.withCredentials = true;
