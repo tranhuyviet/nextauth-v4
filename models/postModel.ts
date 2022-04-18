@@ -28,7 +28,7 @@ const postSchema = new Schema(
 );
 
 postSchema.methods.createUniqueSlug = function createUniqueSlug(title: string) {
-  this.slug = title.split(" ").join("-") + Date.now();
+  this.slug = title.split(" ").join("-") + "-" + Date.now();
 };
 
 const Post = models.posts || model("posts", postSchema);

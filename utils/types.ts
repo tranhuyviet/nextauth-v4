@@ -48,3 +48,16 @@ export type IUserDocument = Document &
     isValidPassword: (password: string) => Promise<void>;
     returnAuthUser: () => IReturnAuthUser;
   };
+
+export interface IPost {
+  _id?: string;
+  title: string;
+  slug: string;
+  content: string;
+  user: string;
+}
+
+export type IPostDocument = Document &
+  IPost & {
+    save: () => Promise<IPostDocument>;
+  };

@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import { IProviders } from "./types";
 
+// USERS
 const name = Yup.string()
   .min(3, "Name must be at least 3 characters!")
   .max(50, "Name cannot be longer than 50 characters!")
@@ -14,8 +15,14 @@ const password = Yup.string()
 const confirmPassword = Yup.string()
   .required("Confirm Password cannot be empty!")
   .oneOf([Yup.ref("password")], "Password not match!");
-
 const provider = Yup.mixed<IProviders>().oneOf(Object.values(IProviders));
+
+// POSTS
+const title = Yup.string()
+  .min(3, "Title must be at least 3 characters!")
+  .max(50, "Title cannot be longer than 50 characters!")
+  .required("Title cannot be empty!");
+const content = Yup.string().required("Content cannot be empty!");
 
 export const signupCredentialsValidate = Yup.object().shape({
   name,
@@ -33,4 +40,9 @@ export const signupProvidersValidate = Yup.object().shape({
 export const loginCredentialsValidate = Yup.object().shape({
   email,
   password,
+});
+
+export const postValidate = Yup.object().shape({
+  title,
+  content,
 });
