@@ -56,7 +56,6 @@ export default NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
-      console.log("USER", user);
       if (user.provider === "credentials") {
         return true;
       } else {

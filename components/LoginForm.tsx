@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import { IUserLoginBody } from "../utils/types";
 import SubmitButton from "./SubmitButton";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { signIn } from "next-auth/react";
 import { loginCredentialsValidate } from "../utils/validate";
 

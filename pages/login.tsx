@@ -78,14 +78,17 @@ const LoginPage: NextPage<{
 
         <p>or</p>
         {providers &&
-          Object.values(providers).map((provider) => (
-            <ProviderLoginButton
-              key={provider.id}
-              providers={provider}
-              csrfToken={csrfToken}
-              className="border border-gray-200"
-            />
-          ))}
+          Object.values(providers).map((provider) => {
+            if (provider.id !== "credentials")
+              return (
+                <ProviderLoginButton
+                  key={provider.id}
+                  providers={provider}
+                  csrfToken={csrfToken}
+                  className="border border-gray-200"
+                />
+              );
+          })}
       </div>
     </div>
   );

@@ -1,17 +1,10 @@
-import { IUserDocument } from "./../../../utils/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import { resError, resSuccess } from "../../../utils/returnRes";
 import errorParse from "../../../utils/errorParse";
-import {
-  loginCredentialsValidate,
-  signupCredentialsValidate,
-  signupProvidersValidate,
-} from "../../../utils/validate";
+import { loginCredentialsValidate } from "../../../utils/validate";
 import userService from "../../../services/userService";
-import User from "../../../models/userModel";
 import db from "../../../utils/db";
-import providerList from "../../../utils/providerList";
 
 const handler = nc();
 

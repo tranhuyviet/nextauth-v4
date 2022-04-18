@@ -23,7 +23,7 @@ const SignupForm = () => {
     try {
       setLoading(true);
       const { data } = await axios.post("/users/signup", values);
-      console.log(data);
+      console.log("SIGNUP RESPON DATA:", data);
       if (data.status === "success") {
         await signIn("credentials", {
           redirect: false,
