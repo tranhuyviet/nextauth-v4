@@ -16,6 +16,19 @@ export interface IUser {
   image?: string;
 }
 
+export interface IUserSignupBody {
+  provider: string;
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface IUserLoginBody {
+  email: string;
+  password: string;
+}
+
 export type IUserDocument = Document &
   IUser & {
     save: () => Promise<IUserDocument>;

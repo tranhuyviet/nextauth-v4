@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { Avatar, Badge, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Image from "next/image";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -44,9 +45,16 @@ const Navbar = () => {
     );
 
   return (
-    <nav className="h-[70px] bg-indigo-600/80 flex items-center space-x-4 text-lg font-semibold text-gray-50 px-4 justify-between">
+    <nav className="h-[70px] bg-gray-700/50 flex items-center space-x-4 text-lg font-semibold text-gray-50 px-4 justify-between">
       <Link href={"/"}>
-        <a>Home</a>
+        <a>
+          <Image
+            src="/images/meta-logo.png"
+            width={50}
+            height={50}
+            alt="meta-logo"
+          />
+        </a>
       </Link>
       {status === "unauthenticated" && (
         <Link href={"/login"}>
