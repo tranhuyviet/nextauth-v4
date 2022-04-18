@@ -1,21 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { IUserLoginBody } from "../utils/types";
+import SubmitButton from "./SubmitButton";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { loginCredentialsValidate } from "../utils/validate";
 
 const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   const initialValues: IUserLoginBody = {
     email: "",
     password: "",
   };
 
   const onSubmit = async (values: IUserLoginBody): Promise<void> => {
-    console.log("submit", values);
+    try {
+      setLoading(true);
+      await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+      }).then((error: any) => {
+        if (error) {
+          const errors = JSON.parse(error?.error);
+          setErrors(errors);
+        }
+        if (!error.error) router.push("/");
+      });
+      setLoading(false);
+    } catch (error: any) {
+      setErrors(error?.response?.data?.errors);
+      setLoading(false);
+    }
   };
 
   const { values, handleChange, handleSubmit, errors, setErrors } =
     useFormik<IUserLoginBody>({
       initialValues,
       onSubmit,
+      validationSchema: loginCredentialsValidate,
     });
 
   return (
@@ -56,9 +82,7 @@ const LoginForm = () => {
 
       {/* button login */}
       <div className="text-left mt-4">
-        <button className="button" type="submit">
-          login
-        </button>
+        <SubmitButton loading={loading} text="login" />
       </div>
     </form>
   );

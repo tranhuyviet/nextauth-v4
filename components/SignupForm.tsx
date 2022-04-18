@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { IUserSignupBody } from "../utils/types";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { signupCredentialsValidate } from "../utils/validate";
+import SubmitButton from "./SubmitButton";
+import { signIn } from "next-auth/react";
 
 const SignupForm = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   const initialValues: IUserSignupBody = {
     provider: "credentials",
     name: "",
@@ -12,13 +20,36 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (values: IUserSignupBody): Promise<void> => {
-    console.log("submit", values);
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/users/signup", values);
+      console.log(data);
+      if (data.status === "success") {
+        await signIn("credentials", {
+          redirect: false,
+          email: values.email,
+          password: values.password,
+        }).then((error: any) => {
+          if (error) {
+            const errors = JSON.parse(error?.error);
+            setErrors(errors);
+          }
+
+          if (!error.error) router.push("/");
+        });
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setErrors(error?.response?.data?.errors);
+      setLoading(false);
+    }
   };
 
   const { values, handleChange, handleSubmit, errors, setErrors } =
     useFormik<IUserSignupBody>({
       initialValues,
       onSubmit,
+      validationSchema: signupCredentialsValidate,
     });
 
   return (
@@ -93,9 +124,7 @@ const SignupForm = () => {
 
       {/* button signup */}
       <div className="text-left mt-4">
-        <button className="button" type="submit">
-          signup
-        </button>
+        <SubmitButton loading={loading} text="signup" />
       </div>
     </form>
   );

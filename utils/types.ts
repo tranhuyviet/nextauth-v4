@@ -29,8 +29,21 @@ export interface IUserLoginBody {
   password: string;
 }
 
+export interface IReturnAuthUser {
+  _id: string;
+  name: string;
+  email: string;
+  image: string;
+  provider: string;
+  role: string;
+  banned: boolean;
+}
+
 export type IUserDocument = Document &
   IUser & {
+    banned: boolean;
     save: () => Promise<IUserDocument>;
     hashPassword: (password: string) => Promise<void>;
+    isValidPassword: (password: string) => Promise<void>;
+    returnAuthUser: () => IReturnAuthUser;
   };

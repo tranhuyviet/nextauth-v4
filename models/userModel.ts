@@ -54,6 +54,19 @@ userSchema.methods.isValidPassword = function isValidPassword(
   return bcrypt.compareSync(password, this.password);
 };
 
+// function return infomation of logged in user
+userSchema.methods.returnAuthUser = function returnAuthUser() {
+  return {
+    _id: this._id,
+    name: this.name,
+    email: this.email,
+    image: this.image,
+    provider: this.provider,
+    role: this.role,
+    banned: this.banned,
+  };
+};
+
 const User = models.users || model("users", userSchema);
 
 export default User;

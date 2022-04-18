@@ -39,7 +39,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         user = isExistUser;
       }
 
-      return resSuccess(res, { user });
+      return resSuccess(res, { user: user.returnAuthUser() });
     } else if (req.body.provider === "credentials") {
       await signupCredentialsValidate.validate(req.body, { abortEarly: false });
 
@@ -68,7 +68,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
       // save user
       await userService.save(user);
-      return resSuccess(res, { user });
+      return resSuccess(res, { user: user.returnAuthUser() });
     } else {
       return resError(
         res,

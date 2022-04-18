@@ -29,3 +29,8 @@ export const signupProvidersValidate = Yup.object().shape({
   email,
   provider,
 });
+
+export const loginCredentialsValidate = Yup.object().shape({
+  email,
+  password,
+});

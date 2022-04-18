@@ -1,12 +1,44 @@
 import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    CredentialProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+        user: {},
+      },
+      authorize: async (credentials, req) => {
+        const values = {
+          email: credentials?.email,
+          password: credentials?.password,
+        };
+        try {
+          if (
+            credentials?.user &&
+            !credentials?.email &&
+            !credentials?.password
+          ) {
+            return JSON.parse(credentials.user);
+          } else {
+            // register or login
+            const { data } = await axios.post("/users/login", values);
+
+            if (data.status === "success") return data.data.user;
+          }
+          return null;
+        } catch (error: any) {
+          throw new Error(JSON.stringify(error?.response?.data?.errors));
+        }
+      },
     }),
   ],
   secret: process.env.JWT_SECRET as string,
@@ -24,22 +56,27 @@ export default NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
-      const signinUser = {
-        name: user.name,
-        email: user.email,
-        image: user.image,
-        provider: account.provider,
-      };
-      try {
-        const { data } = await axios.post("/users/signup", signinUser);
-        if (data.status !== "success" || data.data.user.banned) {
+      console.log("USER", user);
+      if (user.provider === "credentials") {
+        return true;
+      } else {
+        const signinUser = {
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          provider: account.provider,
+        };
+        try {
+          const { data } = await axios.post("/users/signup", signinUser);
+          if (data.status !== "success" || data.data.user.banned) {
+            return false;
+          }
+          user._id = data.data.user._id;
+          user.role = data.data.user.role;
+          return true;
+        } catch (error) {
           return false;
         }
-        user._id = data.data.user._id;
-        user.role = data.data.user.role;
-        return true;
-      } catch (error) {
-        return false;
       }
     },
     async jwt({ token, user, account }) {
