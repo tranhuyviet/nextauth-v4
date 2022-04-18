@@ -22,19 +22,10 @@ export default NextAuth({
           password: credentials?.password,
         };
         try {
-          if (
-            credentials?.user &&
-            !credentials?.email &&
-            !credentials?.password
-          ) {
-            return JSON.parse(credentials.user);
-          } else {
-            // register or login
-            const { data } = await axios.post("/users/login", values);
-
-            if (data.status === "success") return data.data.user;
-          }
-          return null;
+          // login
+          const { data } = await axios.post("/users/login", values);
+          console.log(data);
+          if (data.status === "success") return data.data.user;
         } catch (error: any) {
           throw new Error(JSON.stringify(error?.response?.data?.errors));
         }

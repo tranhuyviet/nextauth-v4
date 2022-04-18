@@ -5,6 +5,7 @@ import SubmitButton from "./SubmitButton";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { loginCredentialsValidate } from "../utils/validate";
+import ErrorMessage from "./ErrorMessage";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,8 @@ const LoginForm = () => {
       validationSchema: loginCredentialsValidate,
     });
 
+  console.log(errors);
+
   return (
     <form onSubmit={handleSubmit}>
       {/* email */}
@@ -77,6 +80,7 @@ const LoginForm = () => {
         {errors && errors.password && (
           <p className="text-red-500 mt-2">{errors.password}</p>
         )}
+        {errors && errors.global && <ErrorMessage message={errors.global} />}
       </div>
 
       {/* button login */}

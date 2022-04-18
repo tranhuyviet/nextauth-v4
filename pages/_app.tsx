@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 // axios seting
 const url =
   process.env.NODE_ENV === "production"
-    ? process.env.API_URL
+    ? (process.env.API_URL as string)
     : "http://localhost:3000/api";
 axios.defaults.baseURL = url;
 axios.defaults.withCredentials = true;

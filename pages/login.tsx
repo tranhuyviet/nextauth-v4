@@ -36,7 +36,7 @@ const LoginPage: NextPage<{
 
   return (
     <div className="container mx-auto flex justify-center items-center h-[calc(100vh-70px)]">
-      <div className="shadow-lg rounded-lg border px-8 pb-8 pt-4 flex flex-col text-center space-y-3">
+      <div className="shadow-lg rounded-lg border px-8 pb-8 pt-4 flex flex-col text-center space-y-3 max-w-[400px] w-[400px]">
         <div>
           <Image
             src="/images/meta-logo.png"

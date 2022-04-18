@@ -27,7 +27,7 @@ const ProviderLoginButton = ({
       <input type="hidden" name="csrfToken" defaultValue={csrfToken} />
       <button
         type="submit"
-        className={`border-gray-50 w-72 py-3 px-10 shadow-md rounded-lg drop-shadow-lg tracking-wide text-base ${className}`}
+        className={`border-gray-100 min-w-72 w-full py-3 px-10 shadow-md rounded-lg drop-shadow-lg tracking-wide text-base ${className}`}
       >
         <div className="flex items-center">
           <div className="relative w-9 h-9">

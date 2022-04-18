@@ -27,6 +27,7 @@ export interface IUserSignupBody {
 export interface IUserLoginBody {
   email: string;
   password: string;
+  global?: string;
 }
 
 export interface IReturnAuthUser {

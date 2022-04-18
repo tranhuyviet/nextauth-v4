@@ -30,8 +30,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         res,
         "Unauthrized",
         {
-          global:
-            "Invalid credentials. Please make sure you entered the correct email address and password.",
+          global: "Wrong email or password.",
         },
         401
       );
