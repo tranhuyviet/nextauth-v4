@@ -1,6 +1,7 @@
 import React from "react";
 import useSWR from "swr";
 import { IPostPopulate } from "../utils/types";
+import PostCard from "./PostCard";
 
 const PostsList = () => {
   const { data, error } = useSWR("/posts");
@@ -10,11 +11,9 @@ const PostsList = () => {
   console.log(data.data.posts);
   const posts: IPostPopulate[] = data.data.posts;
   return (
-    <div className="w-[600px] shadow-md p-8 mt-4">
+    <div className="w-[600px] shadow-md p-8 mt-4 space-y-8">
       {posts.map((post) => (
-        <div key={post._id}>
-          <p>{post.title}</p>
-        </div>
+        <PostCard post={post} key={post._id} />
       ))}
     </div>
   );

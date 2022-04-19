@@ -62,6 +62,7 @@ export interface IPostPopulate {
   title: string;
   slug: string;
   content: string;
+  createdAt: string;
   user: {
     _id: string;
     name: string;

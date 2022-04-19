@@ -21,7 +21,7 @@ const HomePage: NextPage = () => {
         <title>Nextauth version 4</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-col justify-center py-8">
+      <div className="flex flex-col justify-center py-8 items-center">
         <AddPostForm />
         <PostsList />
       </div>
