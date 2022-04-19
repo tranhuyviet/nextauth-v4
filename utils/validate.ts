@@ -18,10 +18,10 @@ const confirmPassword = Yup.string()
 const provider = Yup.mixed<IProviders>().oneOf(Object.values(IProviders));
 
 // POSTS
-const title = Yup.string()
-  .min(3, "Title must be at least 3 characters!")
-  .max(50, "Title cannot be longer than 50 characters!")
-  .required("Title cannot be empty!");
+// const title = Yup.string()
+//   .min(3, "Title must be at least 3 characters!")
+//   .max(50, "Title cannot be longer than 50 characters!")
+//   .required("Title cannot be empty!");
 const content = Yup.string().required("Content cannot be empty!");
 
 export const signupCredentialsValidate = Yup.object().shape({
@@ -43,6 +43,5 @@ export const loginCredentialsValidate = Yup.object().shape({
 });
 
 export const postValidate = Yup.object().shape({
-  title,
   content,
 });

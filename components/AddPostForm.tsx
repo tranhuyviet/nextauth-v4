@@ -12,7 +12,6 @@ const AddPostForm = () => {
   const router = useRouter();
 
   const initialValues: ICreatePostBody = {
-    title: "",
     content: "",
   };
 
@@ -43,14 +42,6 @@ const AddPostForm = () => {
       noValidate
       className="w-[600px] shadow-md p-8"
     >
-      <Input
-        label="Title"
-        id="title"
-        value={values.title}
-        handleChange={handleChange}
-        error={errors.title}
-      />
-
       <Input
         label="Content"
         id="content"

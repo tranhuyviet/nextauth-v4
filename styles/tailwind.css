@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply text-body;
+  }
+}
+
 @layer components {
   .input {
     @apply block w-full rounded-md shadow-sm focus:border-0 focus:ring-blue-600/90 focus:ring-2 h-[46px] tracking-wider mt-2;
@@ -9,5 +15,13 @@
 
   .button {
     @apply capitalize py-2 px-7 rounded-md shadow-md bg-blue-600/90 w-full h-[46px] text-center text-gray-50 text-lg tracking-wider;
+  }
+
+  .button-social-group {
+    @apply flex items-center space-x-3 text-gray-500 hover:cursor-pointer transition-all duration-200;
+  }
+
+  .button-social-icon {
+    @apply h-9 w-9 rounded-full p-[6px] transition-all duration-300;
   }
 }

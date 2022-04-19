@@ -51,16 +51,12 @@ export type IUserDocument = Document &
 
 export interface IPost {
   _id?: string;
-  title: string;
-  slug: string;
   content: string;
   user: string;
 }
 
 export interface IPostPopulate {
   _id: string;
-  title: string;
-  slug: string;
   content: string;
   createdAt: string;
   user: {
@@ -71,7 +67,6 @@ export interface IPostPopulate {
 }
 
 export interface ICreatePostBody {
-  title: string;
   content: string;
   global?: string;
 }

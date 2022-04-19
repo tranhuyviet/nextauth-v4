@@ -1,3 +1,4 @@
+import { Divider } from "@mui/material";
 import React from "react";
 import useSWR from "swr";
 import { IPostPopulate } from "../utils/types";
@@ -11,7 +12,7 @@ const PostsList = () => {
   console.log(data.data.posts);
   const posts: IPostPopulate[] = data.data.posts;
   return (
-    <div className="w-[600px] shadow-md p-8 mt-4 space-y-8">
+    <div className="w-[600px] border border-gray-100 mt-4 flex flex-col-reverse">
       {posts.map((post) => (
         <PostCard post={post} key={post._id} />
       ))}
