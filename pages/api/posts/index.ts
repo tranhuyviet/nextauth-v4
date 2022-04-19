@@ -66,4 +66,43 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 });
 
+// get posts
+handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    // check authentication
+    const token = await getToken({ req, secret });
+
+    if (!token) {
+      return resError(
+        res,
+        "Unauthorized",
+        {
+          global: "You are not logged in",
+        },
+        401
+      );
+    }
+
+    //connect database
+    await db.connect();
+
+    // save post to Database
+    const posts = await postService.getPosts();
+
+    return resSuccess(res, { posts });
+  } catch (error) {
+    console.log("ERRRRR", error);
+    if (error instanceof Error && error.name === "ValidationError") {
+      const errors = errorParse(error);
+      return resError(res, "Bad Request Error - Validate Input", errors, 400);
+    }
+    return resError(
+      res,
+      "Something went wrong",
+      { global: "Something went wrong" },
+      500
+    );
+  }
+});
+
 export default handler;

@@ -21,10 +21,10 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
     // find user by email
     const user = await userService.findUserByEmail(email);
+    console.log(user, user?.provider);
 
     // check user is exist by login another providers
-    console.log(user);
-    if (user?.provider !== "credentials") {
+    if (user?.provider && user?.provider !== "credentials") {
       return resError(
         res,
         "Unauthrized",

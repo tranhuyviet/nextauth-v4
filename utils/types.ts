@@ -57,6 +57,18 @@ export interface IPost {
   user: string;
 }
 
+export interface IPostPopulate {
+  _id: string;
+  title: string;
+  slug: string;
+  content: string;
+  user: {
+    _id: string;
+    name: string;
+    image: string;
+  };
+}
+
 export interface ICreatePostBody {
   title: string;
   content: string;
