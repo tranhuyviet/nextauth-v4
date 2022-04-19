@@ -57,6 +57,12 @@ export interface IPost {
   user: string;
 }
 
+export interface ICreatePostBody {
+  title: string;
+  content: string;
+  global?: string;
+}
+
 export type IPostDocument = Document &
   IPost & {
     save: () => Promise<IPostDocument>;

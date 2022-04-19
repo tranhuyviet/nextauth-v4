@@ -8,6 +8,7 @@ import { getToken } from "next-auth/jwt";
 import { secret } from "../../../lib/config";
 import checkAuthApi from "../../../lib/checkAuthApi";
 import Post from "../../../models/postModel";
+import postService from "../../../services/postService";
 
 const handler = nc();
 
@@ -15,41 +16,39 @@ const handler = nc();
 handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // check authentication
-    // const token = await getToken({ req, secret });
+    const token = await getToken({ req, secret });
 
-    // if (!token) {
-    //   return resError(
-    //     res,
-    //     "Unauthorized",
-    //     {
-    //       global: "You are not logged in",
-    //     },
-    //     401
-    //   );
-    // }
-
-    // console.log(token);
+    if (!token) {
+      return resError(
+        res,
+        "Unauthorized",
+        {
+          global: "You are not logged in",
+        },
+        401
+      );
+    }
 
     // validate post body
     await postValidate.validate(req.body, { abortEarly: false });
 
     const { title, content } = req.body;
 
-    console.log(req.body);
-
     // create new post
-    const post = new Post({
+    const newPost = new Post({
       title,
       content,
+      user: token._id,
     });
 
     // create slug
-    post.createUniqueSlug(title);
-
-    console.log(post);
+    newPost.createUniqueSlug(title);
 
     //connect database
-    // await db.connect();
+    await db.connect();
+
+    // save post to Database
+    const post = await postService.save(newPost);
 
     return resSuccess(res, { post });
   } catch (error) {

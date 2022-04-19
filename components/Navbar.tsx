@@ -36,7 +36,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Navbar = () => {
   const { data: session, status } = useSession();
-  console.log(session);
+
   if (status === "loading")
     return (
       <div className="container mx-auto text-center">
