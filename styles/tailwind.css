@@ -24,4 +24,8 @@
   .button-social-icon {
     @apply h-9 w-9 rounded-full p-[6px] transition-all duration-300;
   }
+
+  .menu-button-wrapper {
+    @apply py-2 w-full h-full flex items-center space-x-4 text-body;
+  }
 }

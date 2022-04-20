@@ -1,7 +1,7 @@
 import React from "react";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { IPostPopulate } from "../utils/types";
-import PostCard from "./PostCard";
+import PostCard from "./PostCard/PostCard";
 import ReactLoading from "react-loading";
 
 const PostsList = () => {
