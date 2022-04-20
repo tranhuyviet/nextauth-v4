@@ -1,14 +1,19 @@
-import { Divider } from "@mui/material";
 import React from "react";
 import useSWR from "swr";
 import { IPostPopulate } from "../utils/types";
 import PostCard from "./PostCard";
+import ReactLoading from "react-loading";
 
 const PostsList = () => {
   const { data, error } = useSWR("/posts");
 
   if (error) return <p>Error...</p>;
-  if (!data) return <p>Loading...</p>;
+  if (!data)
+    return (
+      <div className="mx-auto mt-6">
+        <ReactLoading height={55} width={45} color="#3972ED" type="bars" />
+      </div>
+    );
   console.log(data.data.posts);
   const posts: IPostPopulate[] = data.data.posts;
   return (

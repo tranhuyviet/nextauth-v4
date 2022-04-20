@@ -6,7 +6,7 @@ import moment from "moment";
 
 const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
   return (
-    <div className="px-4 pt-4 pb-2 border-b border-gray-100 first:border-b-0">
+    <div className="px-4 pt-4 pb-2 border-b border-gray-100 first:border-b-0 hover:bg-gray-100/80 transition-all duration-300 hover:cursor-pointer">
       <div className="flex">
         <div className="mr-3">
           <Avatar src={post.user.image} sx={{ width: 48, height: 48 }} />
@@ -45,9 +45,12 @@ const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
               />
             </svg>
           </div>
+
+          {/* content */}
           <div>
-            <p>{post.content}</p>
+            <p className="line-clamp-3">{post.content}</p>
           </div>
+
           <div className="mt-2 flex justify-between w-full">
             {/* comments */}
             <div className="button-social-group group hover:text-blue-600">
