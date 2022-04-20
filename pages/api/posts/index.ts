@@ -32,17 +32,16 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     // validate post body
     await postValidate.validate(req.body, { abortEarly: false });
 
-    const { title, content } = req.body;
+    const { content } = req.body;
 
     // create new post
     const newPost = new Post({
-      title,
       content,
       user: token._id,
     });
 
     // create slug
-    newPost.createUniqueSlug(title);
+    // newPost.createUniqueSlug(title);
 
     //connect database
     await db.connect();
