@@ -1,8 +1,28 @@
+import axios from "axios";
 import React from "react";
+import useSWR from "swr";
+import { IPostPopulate } from "../../utils/types";
 
-const DeletePostButton = () => {
+const DeletePostButton: React.FC<{ postId: string }> = ({ postId }) => {
+  const url = "/posts";
+  const { data, mutate, error } = useSWR(url);
+
+  const handleDeletePost = async () => {
+    try {
+      const { data: resDeletePost } = await axios.delete(`${url}/${postId}`);
+      if (resDeletePost.status === "success") {
+        const posts: IPostPopulate[] = data.data.posts;
+        mutate([...posts.filter((post) => post._id !== postId)]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className="menu-button-wrapper text-red-600/80">
+    <div
+      className="menu-button-wrapper text-red-600/80"
+      onClick={handleDeletePost}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"

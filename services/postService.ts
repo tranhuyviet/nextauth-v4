@@ -14,6 +14,14 @@ const getPosts = async (): Promise<IPostDocument[]> => {
   });
 };
 
-const postService = { save, getPosts };
+const getPostById = async (postId: string): Promise<IPostDocument | null> => {
+  return Post.findById(postId);
+};
+
+const deletePost = async (postId: string): Promise<null> => {
+  return Post.findByIdAndDelete(postId);
+};
+
+const postService = { save, getPosts, getPostById, deletePost };
 
 export default postService;

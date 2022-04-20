@@ -1,17 +1,15 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import React, { useState } from "react";
 import { ICreatePostBody } from "../utils/types";
 import { postValidate } from "../utils/validate";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
-import ReactLoading from "react-loading";
 
 const AddPostForm = () => {
   const url = "/posts";
-  const { mutate } = useSWRConfig();
-  const { data, error } = useSWR(url);
+  const { data, mutate, error } = useSWR(url);
   const [loading, setLoading] = useState(false);
 
   const initialValues: ICreatePostBody = {
@@ -23,10 +21,7 @@ const AddPostForm = () => {
       setLoading(true);
       const { data: resData } = await axios.post(url, values);
       if (resData.status === "success") {
-        mutate(url, [...data.data.posts, resData.data.post], {
-          optimisticData: values,
-          rollbackOnError: true,
-        });
+        mutate([...data.data.posts, resData.data.post]);
       }
       setLoading(false);
     } catch (error: any) {
@@ -41,14 +36,6 @@ const AddPostForm = () => {
       onSubmit,
       validationSchema: postValidate,
     });
-
-  if (error) return <p>Error...</p>;
-  if (!data)
-    return (
-      <div className="mx-auto mt-6">
-        <ReactLoading height={55} width={45} color="#3972ED" type="bars" />
-      </div>
-    );
 
   return (
     <form

@@ -33,7 +33,7 @@ const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
             <p className="text-gray-500/80">
               {moment(post.createdAt).fromNow()}
             </p>
-            <MenuButton />
+            <MenuButton post={post} />
           </div>
 
           {/* content */}

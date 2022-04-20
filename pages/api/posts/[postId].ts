@@ -1,0 +1,79 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import nc from "next-connect";
+import { resError, resSuccess } from "../../../utils/returnRes";
+import errorParse from "../../../utils/errorParse";
+import db from "../../../utils/db";
+import { getToken } from "next-auth/jwt";
+import { secret } from "../../../lib/config";
+import postService from "../../../services/postService";
+
+const handler = nc();
+
+// delete post by Id
+handler.delete(async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    // check authentication
+    const token = await getToken({ req, secret });
+
+    if (!token) {
+      return resError(
+        res,
+        "Unauthorized",
+        {
+          global: "You are not logged in",
+        },
+        401
+      );
+    }
+
+    const { postId } = req.query;
+
+    //connect database
+    await db.connect();
+
+    // check postId is correct
+    const post = await postService.getPostById(postId as string);
+
+    if (!post) {
+      return resError(
+        res,
+        "Not Found",
+        {
+          global: "Not fount the post",
+        },
+        401
+      );
+    }
+
+    // check the post belong the user authenticated
+    if (post.user.toString() !== token._id) {
+      return resError(
+        res,
+        "Not Allowed",
+        {
+          global: "You do not have permission to delete the post",
+        },
+        405
+      );
+    }
+
+    // delete the post
+    await postService.deletePost(postId as string);
+
+    return resSuccess(res, null);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error && error.name === "ValidationError") {
+      const errors = errorParse(error);
+      return resError(res, "Bad Request Error - Validate Input", errors, 400);
+    }
+    return resError(
+      res,
+      "Something went wrong",
+      { global: "Something went wrong" },
+      500
+    );
+  }
+});
+
+export default handler;

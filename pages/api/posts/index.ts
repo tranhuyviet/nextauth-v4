@@ -6,7 +6,6 @@ import { postValidate } from "../../../utils/validate";
 import db from "../../../utils/db";
 import { getToken } from "next-auth/jwt";
 import { secret } from "../../../lib/config";
-import checkAuthApi from "../../../lib/checkAuthApi";
 import Post from "../../../models/postModel";
 import postService from "../../../services/postService";
 

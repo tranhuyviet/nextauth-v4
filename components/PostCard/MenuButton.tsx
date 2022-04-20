@@ -1,8 +1,10 @@
 import { IconButton } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import PopupMenu from "./PopupMenu";
-const MenuButton = () => {
+import { IPostPopulate } from "../../utils/types";
+
+const MenuButton: React.FC<{ post: IPostPopulate }> = ({ post }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -18,7 +20,12 @@ const MenuButton = () => {
       <IconButton className="hover:!bg-blue-600/20" onClick={handleClick}>
         <MoreHorizOutlinedIcon className="hover:text-blue-600/80" />
       </IconButton>
-      <PopupMenu open={open} handleClose={handleClose} anchorEl={anchorEl} />
+      <PopupMenu
+        open={open}
+        handleClose={handleClose}
+        anchorEl={anchorEl}
+        post={post}
+      />
     </div>
   );
 };
