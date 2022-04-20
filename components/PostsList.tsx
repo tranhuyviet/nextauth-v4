@@ -1,5 +1,5 @@
 import React from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { IPostPopulate } from "../utils/types";
 import PostCard from "./PostCard";
 import ReactLoading from "react-loading";
@@ -14,8 +14,7 @@ const PostsList = () => {
         <ReactLoading height={55} width={45} color="#3972ED" type="bars" />
       </div>
     );
-  console.log(data.data.posts);
-  const posts: IPostPopulate[] = data.data.posts;
+  const posts: IPostPopulate[] = data?.data?.posts || [];
   return (
     <div className="w-[600px] border border-gray-100 mt-4 flex flex-col-reverse">
       {posts.map((post) => (

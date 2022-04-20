@@ -51,7 +51,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
 
     return resSuccess(res, { post });
   } catch (error) {
-    console.log("ERRRRR", error);
+    console.log(error);
     if (error instanceof Error && error.name === "ValidationError") {
       const errors = errorParse(error);
       return resError(res, "Bad Request Error - Validate Input", errors, 400);
