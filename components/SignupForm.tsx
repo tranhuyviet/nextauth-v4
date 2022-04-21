@@ -124,7 +124,11 @@ const SignupForm = () => {
 
       {/* button signup */}
       <div className="text-left mt-4">
-        <SubmitButton loading={loading} text="signup" />
+        <SubmitButton
+          loading={loading}
+          text="signup"
+          className="w-full h-[46px] text-lg"
+        />
       </div>
     </form>
   );

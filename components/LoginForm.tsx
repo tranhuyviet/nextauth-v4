@@ -83,7 +83,11 @@ const LoginForm = () => {
 
       {/* button login */}
       <div className="text-left mt-4">
-        <SubmitButton loading={loading} text="login" />
+        <SubmitButton
+          loading={loading}
+          text="login"
+          className="w-full h-[46px] text-lg"
+        />
       </div>
     </form>
   );
