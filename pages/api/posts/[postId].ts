@@ -6,6 +6,7 @@ import db from "../../../utils/db";
 import { getToken } from "next-auth/jwt";
 import { secret } from "../../../lib/config";
 import postService from "../../../services/postService";
+import { postValidate } from "../../../utils/validate";
 
 const handler = nc();
 
@@ -61,6 +62,77 @@ handler.delete(async (req: NextApiRequest, res: NextApiResponse) => {
     await postService.deletePost(postId as string);
 
     return resSuccess(res, null);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error && error.name === "ValidationError") {
+      const errors = errorParse(error);
+      return resError(res, "Bad Request Error - Validate Input", errors, 400);
+    }
+    return resError(
+      res,
+      "Something went wrong",
+      { global: "Something went wrong" },
+      500
+    );
+  }
+});
+
+// edit post by Id
+handler.put(async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    // check authentication
+    const token = await getToken({ req, secret });
+
+    if (!token) {
+      return resError(
+        res,
+        "Unauthorized",
+        {
+          global: "You are not logged in",
+        },
+        401
+      );
+    }
+
+    // validate post body
+    await postValidate.validate(req.body, { abortEarly: false });
+
+    const { postId } = req.query;
+    const { content } = req.body;
+
+    //connect database
+    await db.connect();
+
+    // check postId is correct
+    const post = await postService.getPostById(postId as string);
+
+    if (!post) {
+      return resError(
+        res,
+        "Not Found",
+        {
+          global: "Not fount the post",
+        },
+        401
+      );
+    }
+
+    // check the post belong the user authenticated
+    if (post.user.toString() !== token._id) {
+      return resError(
+        res,
+        "Not Allowed",
+        {
+          global: "You do not have permission to edit the post",
+        },
+        405
+      );
+    }
+
+    // update the post
+    const updatedPost = await postService.updatePost(postId as string, content);
+
+    return resSuccess(res, { post: updatedPost });
   } catch (error) {
     console.log(error);
     if (error instanceof Error && error.name === "ValidationError") {

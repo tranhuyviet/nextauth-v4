@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import useSWR from "swr";
-import { IPostPopulate } from "../../utils/types";
 
 const DeletePostButton: React.FC<{ postId: string }> = ({ postId }) => {
   const url = `/posts/${postId}`;

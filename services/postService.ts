@@ -22,6 +22,13 @@ const deletePost = async (postId: string): Promise<null> => {
   return Post.findByIdAndDelete(postId);
 };
 
-const postService = { save, getPosts, getPostById, deletePost };
+const updatePost = async (
+  postId: string,
+  content: string
+): Promise<IPostDocument | null> => {
+  return Post.findByIdAndUpdate(postId, { content }, { new: true });
+};
+
+const postService = { save, getPosts, getPostById, deletePost, updatePost };
 
 export default postService;
