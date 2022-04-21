@@ -9,7 +9,7 @@ import SubmitButton from "./SubmitButton";
 
 const AddPostForm = () => {
   const url = "/posts";
-  const { data, mutate, error } = useSWR(url);
+  const { mutate } = useSWR(url);
   const [loading, setLoading] = useState(false);
 
   const initialValues: ICreatePostBody = {
@@ -19,10 +19,10 @@ const AddPostForm = () => {
   const onSubmit = async (values: ICreatePostBody): Promise<void> => {
     try {
       setLoading(true);
-      const { data: resData } = await axios.post(url, values);
-      if (resData.status === "success") {
-        mutate([...data.data.posts, resData.data.post]);
-      }
+
+      await axios.post(url, values);
+      mutate();
+
       setLoading(false);
     } catch (error: any) {
       setErrors(error?.response?.data?.errors);

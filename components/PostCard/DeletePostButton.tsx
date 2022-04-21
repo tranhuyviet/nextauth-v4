@@ -4,16 +4,13 @@ import useSWR from "swr";
 import { IPostPopulate } from "../../utils/types";
 
 const DeletePostButton: React.FC<{ postId: string }> = ({ postId }) => {
-  const url = "/posts";
-  const { data, mutate, error } = useSWR(url);
+  const url = `/posts/${postId}`;
+  const { mutate } = useSWR("/posts");
 
   const handleDeletePost = async () => {
     try {
-      const { data: resDeletePost } = await axios.delete(`${url}/${postId}`);
-      if (resDeletePost.status === "success") {
-        const posts: IPostPopulate[] = data.data.posts;
-        mutate([...posts.filter((post) => post._id !== postId)]);
-      }
+      await axios.delete(url);
+      mutate();
     } catch (error) {
       console.log(error);
     }

@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
-        <SWRConfig value={{ fetcher }}>
+        <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
           <Layout>
             <Component {...pageProps} />
           </Layout>

@@ -16,7 +16,7 @@ const PostsList = () => {
     );
 
   const posts: IPostPopulate[] = data?.data?.posts || [];
-
+  console.log("POST LIST", posts);
   return (
     <div className="w-[600px] border border-gray-100 mt-4 flex flex-col-reverse">
       {posts.map((post) => (
