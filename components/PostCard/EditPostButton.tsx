@@ -1,8 +1,13 @@
 import React from "react";
 
-const EditPostButton = () => {
+const EditPostButton: React.FC<{ openEditForm: () => void }> = ({
+  openEditForm,
+}) => {
   return (
-    <div className="menu-button-wrapper text-blue-600/80">
+    <div
+      className="menu-button-wrapper text-blue-600/80"
+      onClick={openEditForm}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"

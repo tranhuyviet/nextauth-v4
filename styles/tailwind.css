@@ -14,7 +14,7 @@
   }
 
   .button {
-    @apply capitalize py-2 px-7 rounded-md shadow-md bg-blue-600/90 w-full h-[46px] text-center text-gray-50 text-lg tracking-wider;
+    @apply capitalize py-1 px-2 rounded-md shadow-md bg-blue-600/90 text-center text-gray-50 text-base tracking-wider;
   }
 
   .button-social-group {

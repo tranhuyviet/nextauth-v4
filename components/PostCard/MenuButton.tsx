@@ -4,7 +4,10 @@ import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import PopupMenu from "./PopupMenu";
 import { IPostPopulate } from "../../utils/types";
 
-const MenuButton: React.FC<{ post: IPostPopulate }> = ({ post }) => {
+const MenuButton: React.FC<{
+  post: IPostPopulate;
+  openEditForm: () => void;
+}> = ({ post, openEditForm }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -25,6 +28,7 @@ const MenuButton: React.FC<{ post: IPostPopulate }> = ({ post }) => {
         handleClose={handleClose}
         anchorEl={anchorEl}
         post={post}
+        openEditForm={openEditForm}
       />
     </div>
   );

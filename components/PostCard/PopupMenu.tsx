@@ -11,7 +11,8 @@ const PopupMenu: React.FC<{
   handleClose: () => void;
   anchorEl: HTMLElement | null;
   post: IPostPopulate;
-}> = ({ open, handleClose, anchorEl, post }) => {
+  openEditForm: () => void;
+}> = ({ open, handleClose, anchorEl, post, openEditForm }) => {
   const { data: session } = useSession();
   if (!post) return <p>Loading</p>;
 
@@ -39,7 +40,7 @@ const PopupMenu: React.FC<{
             <DeletePostButton postId={post._id} />
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <EditPostButton />
+            <EditPostButton openEditForm={openEditForm} />
           </MenuItem>
         </Menu>
       </>

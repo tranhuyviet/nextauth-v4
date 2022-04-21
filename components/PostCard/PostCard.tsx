@@ -1,13 +1,26 @@
-import { Avatar } from "@mui/material";
-import React from "react";
+import { Avatar, TextareaAutosize } from "@mui/material";
+import React, { useState } from "react";
 import { IPostPopulate } from "../../utils/types";
 import moment from "moment";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import MenuButton from "./MenuButton";
+import SubmitButton from "../SubmitButton";
 
 const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const openEditForm = () => {
+    setIsEdit(true);
+  };
+
+  const closeEditForm = () => {
+    setIsEdit(false);
+  };
+
+  console.log(isEdit);
+
   return (
     <div className="px-4 pt-4 pb-2 border-b border-gray-100 first:border-b-0 hover:bg-gray-100/80 transition-all duration-300 hover:cursor-pointer">
       <div className="flex">
@@ -33,13 +46,43 @@ const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
             <p className="text-gray-500/80">
               {moment(post.createdAt).fromNow()}
             </p>
-            <MenuButton post={post} />
+            <MenuButton post={post} openEditForm={openEditForm} />
           </div>
 
           {/* content */}
-          <div>
-            <p className="line-clamp-3">{post.content}</p>
-          </div>
+          {!isEdit ? (
+            <div>
+              <p className="line-clamp-3">{post.content}</p>
+            </div>
+          ) : (
+            // edit form
+            <div className="flex flex-col w-full">
+              <TextareaAutosize
+                id="content"
+                name="content"
+                minRows={2}
+                placeholder="What's happening?"
+                className="!w-full !border border-gray-100 !rounded-md !outline-none !focus:border-gray-200 !forcus:ring-gray-900 !focus:ring-2 !focus:outline-none"
+                // value={values.content}
+                // onChange={handleChange}
+              />
+              <div className="flex justify-end border-t border-gray-100 mt-4 pt-4">
+                <button
+                  className="button rounded-full w-[87px] h-[36px] text-[15px] mr-4 text-red-600/80 bg-transparent border border-red-600/80"
+                  type="button"
+                  onClick={closeEditForm}
+                >
+                  Cancel
+                </button>
+                <SubmitButton
+                  disabled={false}
+                  loading={false}
+                  text="Save"
+                  className="rounded-full w-[87px] h-[36px] text-[15px]"
+                />
+              </div>
+            </div>
+          )}
 
           {/* comment, like, share buttons */}
           <div className="mt-2 flex justify-between w-full">
