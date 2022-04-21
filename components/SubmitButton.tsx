@@ -2,7 +2,7 @@ import React from "react";
 import ReactLoading from "react-loading";
 
 const SubmitButton: React.FC<{
-  disabled: boolean;
+  disabled?: boolean;
   loading: boolean;
   text: string;
   className?: string;
