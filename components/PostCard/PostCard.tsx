@@ -1,15 +1,27 @@
 import { Avatar, TextareaAutosize } from "@mui/material";
-import React, { useState } from "react";
-import { IPostPopulate } from "../../utils/types";
+import React, { useEffect, useState } from "react";
+import { ICreatePostBody, IPostPopulate } from "../../utils/types";
 import moment from "moment";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import MenuButton from "./MenuButton";
 import SubmitButton from "../SubmitButton";
+import { useFormik } from "formik";
+import { postValidate } from "../../utils/validate";
+import axios from "axios";
+import useSWR from "swr";
+import { useRouter } from "next/router";
 
 const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
+  const route = useRouter();
   const [isEdit, setIsEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { mutate } = useSWR("/posts");
+
+  const initialValues: ICreatePostBody = {
+    content: post.content,
+  };
 
   const openEditForm = () => {
     setIsEdit(true);
@@ -19,10 +31,37 @@ const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
     setIsEdit(false);
   };
 
-  console.log(isEdit);
+  const onSubmit = async (values: ICreatePostBody): Promise<void> => {
+    try {
+      setLoading(true);
+
+      await axios.put(`/posts/${post._id}`, values);
+      mutate();
+
+      setLoading(false);
+      setIsEdit(false);
+    } catch (error: any) {
+      setErrors(error?.response?.data?.errors);
+      setLoading(false);
+      setIsEdit(false);
+    }
+  };
+
+  const { values, handleChange, handleSubmit, errors, setErrors } =
+    useFormik<ICreatePostBody>({
+      initialValues,
+      onSubmit,
+      validationSchema: postValidate,
+    });
+
+  useEffect(() => {
+    if (isEdit) {
+      document.getElementById("contentUpdate")?.focus();
+    }
+  }, [isEdit]);
 
   return (
-    <div className="px-4 pt-4 pb-2 border-b border-gray-100 first:border-b-0 hover:bg-gray-100/80 transition-all duration-300 hover:cursor-pointer">
+    <div className="px-4 pt-4 pb-2 border-b border-gray-100 first:border-b-0 hover:bg-gray-100/80 transition-all duration-300 ">
       <div className="flex">
         <div className="mr-3">
           <Avatar src={post.user.image} sx={{ width: 48, height: 48 }} />
@@ -52,36 +91,43 @@ const PostCard: React.FC<{ post: IPostPopulate }> = ({ post }) => {
           {/* content */}
           {!isEdit ? (
             <div>
-              <p className="line-clamp-3">{post.content}</p>
+              <p
+                className="line-clamp-3 hover:cursor-pointer"
+                onClick={() => route.push(`/${post._id}`)}
+              >
+                {post.content}
+              </p>
             </div>
           ) : (
             // edit form
-            <div className="flex flex-col w-full">
-              <TextareaAutosize
-                id="content"
-                name="content"
-                minRows={2}
-                placeholder="What's happening?"
-                className="!w-full !border border-gray-100 !rounded-md !outline-none !focus:border-gray-200 !forcus:ring-gray-900 !focus:ring-2 !focus:outline-none"
-                // value={values.content}
-                // onChange={handleChange}
-              />
-              <div className="flex justify-end border-t border-gray-100 mt-4 pt-4">
-                <button
-                  className="button rounded-full w-[87px] h-[36px] text-[15px] mr-4 text-red-600/80 bg-transparent border border-red-600/80"
-                  type="button"
-                  onClick={closeEditForm}
-                >
-                  Cancel
-                </button>
-                <SubmitButton
-                  disabled={false}
-                  loading={false}
-                  text="Save"
-                  className="rounded-full w-[87px] h-[36px] text-[15px]"
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="flex flex-col w-full">
+                <TextareaAutosize
+                  id="contentUpdate"
+                  name="content"
+                  minRows={2}
+                  placeholder="What's happening?"
+                  className="!w-full !border border-gray-100 !rounded-md !outline-none !focus:border-gray-200 !forcus:ring-gray-900 !focus:ring-2 !focus:outline-none"
+                  value={values.content}
+                  onChange={handleChange}
                 />
+                <div className="flex justify-end border-t border-gray-100 mt-4 pt-4">
+                  <button
+                    className="button rounded-full w-[87px] h-[36px] text-[15px] mr-4 text-red-600/80 bg-transparent border border-red-600/80"
+                    type="button"
+                    onClick={closeEditForm}
+                  >
+                    Cancel
+                  </button>
+                  <SubmitButton
+                    disabled={!values.content}
+                    loading={loading}
+                    text="Save"
+                    className="rounded-full w-[87px] h-[36px] text-[15px]"
+                  />
+                </div>
               </div>
-            </div>
+            </form>
           )}
 
           {/* comment, like, share buttons */}
